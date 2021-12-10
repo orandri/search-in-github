@@ -1,9 +1,16 @@
 import "dotenv/config";
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
+import { Image } from 'react-native';
 
 export default function App() {
+
+  const [isLoading, setLoading] = useState(true);
+  const [data,setData] = useState({})
+  const [input,setInput] = useState("")
+
 
 
   const fetchUser = async (username) => {
@@ -11,45 +18,94 @@ export default function App() {
       const { API_URL } = process.env;
       //console.log(API_URL)
      const response = await fetch(`${API_URL}/api/users/${username}`, {
-        //const response = await fetch(`http://localhost:4242/api/users/${username}`,{
-        //mode: 'cors',
+      //const response = await fetch(`http://8828-2a01-e0a-34f-de60-cc9f-5a21-4811-f419.ngrok.io/api/users/${input}`, {
         headers: {
           Authorization: "token 226BaZospYUTcoRvwba0SuPw5Vl_3RxjSr4PZmaZ3m7fac7Xb"
         }
-        /*headers: {
-          'Access-Control-Allow-Origin':'*'
-        }*/
       });
       const data = await response.json();
-      //console.log(data);
-      console.log("aa")
-      return data;
+      if(data.user_bd){
+        setData(data["user_bd"])
+      }
+      else{
+        setData(data["message"])
+      }
       
-      //return data
+      console.log(data)
+     
+      return data;
     }
     catch(e){
       console.log(e)
     }
+    finally{
+      setLoading(false);
+    }
   }
 
-   const user_json = fetchUser("orandri")
-   console.log(JSON.stringify(user_json))
-  //console.log(user_json)
+  useEffect(() => {
+    console.log(fetchUser("orandri"))
+    //fetchUser("")
+  }, []);
 
-  //fetchUser("redalakheir");
- 
+   /*function Compteur(){
+    const {state, setState} = useState({ a:2})
+    const data = fetchUser("orandri")
+    const handleClick = function(e){
+      e.preventDefault()
+      setState({a:3})
+      console.log("test"  + setState(fetchUser("orandri")))
+      
+    }
+    return <button onClick={handleClick}>{JSON.stringify(state)}</button>
+   }
+*/
+
+//const pdp  = data.avatar_url
+
+//console.log(pdp)
+   //fetchUser("orandri")
+   function info_user() {
+     //console.log("okkk")
+     //fetchUser(input)
+     console.log(data.id)
+     console.log(data.username)
+    
+   }
+  
   return (
     <View style={styles.container}>
-      <Text>Hello !</Text>
-      <TextInput style={styles.inputText}></TextInput>
-      <Button onPress={() => {
-        console.log('test')
-        fetchUser("redalakheir")
-      }}
-      title="Rechercher"
-      />
+      
+      {isLoading ? <ActivityIndicator/> : 
+      data.message ? (
+        <Text>Utilisateur inexistant</Text>
+      ):
+        <View>
+            <Text>Saisir le username : </Text>
+         <TextInput style={styles.inputText}
+          value = {input}
+          onChangeText={setInput}></TextInput>
+
+         <Button onPress={() => fetchUser(input) }
+        title="Rechercher"
+        />
+        <Text>Id : {data.id}</Text>
+        <Text>Login : {data.login}</Text>
+        <Text>Followers : {data.followers}</Text>
+        <Text>Followings : {data.following}</Text>
+        <Image source={{uri:data.avatar_url}} style={styles.image} resizeMode="center"></Image>
+      </View>
+      
+    }
+      
+     
       <StatusBar style="auto" />
     </View>
+    /*<View style={{ flex: 1, padding: 24 }}>
+    {isLoading ? <ActivityIndicator/> : (
+      <Text>{data.login}</Text>
+    )}
+  </View>*/
   );
 }
 
@@ -60,4 +116,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  input: {
+    backgroundColor: '#124523'
+  },
+  image: {
+
+  }
 });
