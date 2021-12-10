@@ -1,0 +1,7 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "js",
+    "exec": "npx babel-node src/main"
+} 
