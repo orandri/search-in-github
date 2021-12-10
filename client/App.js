@@ -18,7 +18,6 @@ export default function App() {
       const { API_URL } = process.env;
       //console.log(API_URL)
      const response = await fetch(`${API_URL}/api/users/${username}`, {
-      //const response = await fetch(`http://8828-2a01-e0a-34f-de60-cc9f-5a21-4811-f419.ngrok.io/api/users/${input}`, {
         headers: {
           Authorization: "token 226BaZospYUTcoRvwba0SuPw5Vl_3RxjSr4PZmaZ3m7fac7Xb"
         }
