@@ -10,7 +10,7 @@ export default function App() {
     try {
       const { API_URL } = process.env;
       //console.log(API_URL)
-     const response = await fetch(`http://944f-2a01-e0a-34f-de60-cc9f-5a21-4811-f419.ngrok.io/api/users/${username}`, {
+     const response = await fetch(`${API_URL}/api/users/${username}`, {
         //const response = await fetch(`http://localhost:4242/api/users/${username}`,{
         //mode: 'cors',
         headers: {
